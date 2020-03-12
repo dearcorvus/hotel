@@ -1,0 +1,26 @@
+<!--pages/plan/plan.wxml-->
+<view class="page_box">
+
+  <!-- 元素 -->
+  <view class="page_item"  wx:for='{{info}}' wx:key=''>
+      <view class="page_list">
+        <!-- <navigator url="../sign/sign?id={{item.id}}" > -->
+         <navigator url="../planUpdate/planUpdate?id={{item.id}}" >
+        <view>
+          <text> {{item.title}}</text>
+          <text> {{item.status == 2 ? '通过':''}}</text>
+        </view>
+        </navigator>
+        <view>
+          <text> {{item.createtime}}</text>
+          <image src="../../static/images/delete.png" bindtap="updateFunction" data-value="{{item.id}}"></image> 
+        </view>
+      </view>
+  </view>
+
+</view>
+<navigator class="planAdd" url="../planAdd/planAdd">
+  <image src="../../static/images/sum.png"></image>
+</navigator>
+
+

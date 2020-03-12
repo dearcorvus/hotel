@@ -19,8 +19,13 @@ Page({
         console.log(1)
       }
     })
-    this.orderFunction();
+    // this.orderFunction();
+    this.navFunction();
   },
+
+  /**
+   * 扫码获取
+  */
   Saom: function () {
     var uid = wx.getStorageSync("user");
 
@@ -28,6 +33,7 @@ Page({
       onlyFromCamera: true,
       success(res) {
         if (res.errMsg == "scanCode:ok") {
+          console.log(res)
           if (res.result) {
             wx.request({
               url: app.url + 'Saom/hotelSaom',
@@ -43,7 +49,7 @@ Page({
                 console.log(r)
                 if (r.data.code == 200) {
                   wx.navigateTo({
-                    url: "/pages/goods/goods?type=1&detail=" + r.data.data.goodsid
+                    url: "/pages/goods/goods?type=1&detail=" + r.data.data.goodsid + "&order_id=" + r.data.data.order_id
                   })
                 } else {
                   wx.showToast({
@@ -62,6 +68,10 @@ Page({
       }
     })
   },
+
+  /**
+   * 获取订单内容
+  */
   orderFunction:function(e){
     var that = this 
     var user = wx.getStorageSync("user");
@@ -77,6 +87,7 @@ Page({
       method: 'GET',
       dataType: 'json',
       success: function(res) {
+        console.log(res)
         that.setData({
           order_item: res.data.data.data
         })
@@ -85,26 +96,37 @@ Page({
   },
   navFunction:function(e){
     var that = this
-    var tid = '';
+    var tid = '1';
     if (e) {
       tid = e.target.dataset.id
     }
     // var tid = e.target.dataset.id
     var user = wx.getStorageSync("user");
     var id = user.userid
-    if (that.data != tid){
+    if (that.data.nav != tid){
       that.setData({
-        nav:tid
+        nav:tid,
+        order_item:[]
       })
     }
-    wx.showLoading({
-      title: '加载中...',
-    })
+    that.showFuntion(tid, 1);
+  },
+  /**
+ *获取页面内容 
+* @page 分页
+*/
+  showFuntion: function (tid = 1, page = 1) {
+    var that = this;
+    var user = wx.getStorageSync("user");
+    var id = user.userid;
+
+    let ranklistBefore = that.data.order_item;
     wx.request({
-      url: app.url +'shop/shopOrder',
+      url: app.url + 'shop/shopOrder',
       data: {
-        id:id,
-        tid:tid
+        id: id,
+        tid: tid,
+        page:page
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -112,12 +134,40 @@ Page({
       method: 'GET',
       dataType: 'json',
       responseType: 'text',
-      success: function(res) {
-        wx.hideLoading()
+      success: function (res) {
+        // 每次加载数据,请求一次就发送10条数据过来
+        let eachData = res.data.data.data;
+        if (eachData.length == 0) {
+          wx.showToast({
+            title: '没有更多数据了!~',
+            icon: 'none'
+          })
+        } else {
+          wx.showToast({
+            title: '数据加载中...',
+            icon: 'none'
+          })
+        }
+
         that.setData({
-          order_item: res.data.data.data
-        })  
+          loadText: "数据请求中",
+          loading: true,
+          order_item: ranklistBefore.concat(eachData),
+          loadText: "加载更多",
+          loading: false,
+          page: res.data.data.current_page
+        });
       },
     })
-  }
+  },
+  /**
+ * 页面上拉触底事件的处理函数
+ */
+  onReachBottom: function () {
+    var that = this;
+    var page = that.data.page; 
+    var tid = that.data.nav;
+    // console.log(that.data)
+    that.showFuntion(tid,Number(page) + Number(1));
+  },
 })

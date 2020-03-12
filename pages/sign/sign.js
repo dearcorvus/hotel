@@ -1,37 +1,18 @@
-// pages/user/user.js
-const app = getApp()
+// pages/sign/sign.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    user:[]
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that = this
-    var uid = wx.getStorageSync("user");
-    console.log(uid)
-    wx.request({
-      url: app.url +'shop/shopInfo',
-      data:{
-        shopid: uid.userid,
-        sf: uid.sf
-      },
-      header:{
-        'content-type': 'application/json' // 默认值
-      },
-      success:function(res){  
-        console.log(res)
-        that.setData({
-          user: res.data.data
-        });
-      }
-    })
+
   },
 
   /**
@@ -81,12 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
 
-  },
-  //联系客服
-  callfunction: function (e) {
-    console.log(e)
-    wx.makePhoneCall({
-      phoneNumber: e.currentTarget.dataset.val //仅为示例，并非真实的电话号码
-    })
-  },
+  }
 })

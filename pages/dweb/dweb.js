@@ -16,9 +16,10 @@ Page({
     var that = this
     let num = options.oid
     let title
-    if(num == 1){
+    if(num == 2){
       title = '计价规则';
-    }else{
+    }
+    if(num==3){
       title = '法律条款及隐私政策';
     }
     // console.log(options)
@@ -27,17 +28,14 @@ Page({
     })
 
     wx.request({
-      url: app.url +'dweb',
+      url: app.url +'web/index',
+      data:{
+        type:num
+      },
       success:function(res){
-        if (num == 1) {
           that.setData({
-            nodes: res.data.data.member_agreement
+            nodes: res.data.data.info
           });
-        } else {
-          that.setData({
-            nodes: res.data.data.price_guide1
-          });
-        }
       }
     })
   },

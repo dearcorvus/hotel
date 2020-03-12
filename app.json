@@ -12,7 +12,12 @@
     "pages/info/info",
     "pages/components/form-page/form-page",
     "pages/components/form/form",
-    "pages/dweb/dweb"
+    "pages/dweb/dweb",
+    "pages/orderinfo/orderinfo",
+    "pages/plan/plan",
+    "pages/planAdd/planAdd",
+    "pages/planUpdate/planUpdate",
+    "pages/sign/sign"
   ],
   "window": {
     "backgroundTextStyle": "light",

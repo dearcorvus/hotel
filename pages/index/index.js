@@ -7,12 +7,15 @@ Page({
     isuserInfo: false,
   },
   onLoad: function () {
-
+    var that = this
+    that.setData({
+      isuserInfo: true
+    })
   },
   leadFunction:function(){
     var user = wx.getStorageSync('user');
 
-    if (user.sf == 2) {
+    if (user.sf == 3) {
       wx.redirectTo({
         url: '../lead/index'
       })
@@ -25,26 +28,24 @@ Page({
   hotelFunction:function(){
     var user = wx.getStorageSync('user');
 
-    if (user.sf == 3) {
+    if (user.sf == 5) {
       wx.redirectTo({
         url: '../hotel/index'
       })
     } else {
       wx.navigateTo({
-        url: '../info/info?type=3',
+        url: '../info/info?type=4',
       })
     }
   },
   // 用户授权
   bindGetUserInfo: function (e) {
     var that = this;
-    console.log(e);
 
     //此处授权得到userInfo
     if (e.detail.errMsg == "getUserInfo:ok") {
       wx.login({
         success: function (result) {
-          console.log("uuuuuuuuuuuuuuu", result.code);
           if (result.code) {
             wx.getUserInfo({
               success: function (res) {
@@ -80,21 +81,29 @@ Page({
                         console.log("保存成功", res);
                         usermsg.userid = res.data.userid;
                         usermsg.sf = res.data.sf;
+                        usermsg.tel = res.data.tel;
                         wx.setStorageSync('user', usermsg);
 
                         that.setData({
                           isuserInfo: false,
                         });
+                        if (res.data.code == 300) {
+                          wx.showModal({
+                            title: '提示',
+                            content: '你的账号已被禁止登录',
+                          })
+                        }else{
+                          if (res.data.sf == 3) {
+                            wx.redirectTo({
+                              url: '../lead/index'
+                            })
+                          }
+                          if (res.data.sf == 5) {
+                            wx.redirectTo({
+                              url: '../hotel/index'
+                            })
+                        }
 
-                        if (res.data.sf == 2) {
-                          wx.redirectTo({
-                            url: '../lead/index'
-                          })
-                        } 
-                        if (res.data.sf == 3) {
-                          wx.redirectTo({
-                            url: '../hotel/index'
-                          })
                         }
 
                       }
@@ -125,17 +134,16 @@ Page({
     wx.getStorage({
       key: "user",
       success: function (res) {
-        console.log("获取缓存成功");
         if (res.data.userid) {
           that.setData({
             isuserInfo: false
           })
-          if (res.data.sf == 2){
+          if (res.data.sf == 3){
             wx.redirectTo({
               url: '../lead/index'
             })
           }
-          if (res.data.sf == 3){
+          if (res.data.sf == 5){
             wx.redirectTo({
               url: '../hotel/index'
             })
@@ -155,6 +163,25 @@ Page({
       }
     });
   },
-
-
+  //验证登录是否过期
+  checksession: function () {
+    wx.checkSession({
+      success: function (res) {
+        console.log(res, '登录未过期')
+        // wx.showToast({
+        //   title: '登录未过期啊',
+        // })
+      },
+      fail: function (res) {
+        console.log(res, '登录过期了')
+        wx.showModal({
+          title: '提示',
+          content: '你的登录信息过期了，请重新登录',
+        })
+        that.setData({
+          isuserInfo: true
+        })
+      }
+    })
+  }
 })

@@ -6,11 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    actionSheetHidden: true,
-    nav:1,
-    type_item: [{id:1,name:"女装"},{id:2,name:"男装"},{id:3,name:"女童"},{id:4,name:"男童"}],
     goods_item:[],
-    showtype:'ALL'
   },
 
   /**
@@ -22,62 +18,62 @@ Page({
     wx.showLoading({
       title: '加载中...',
     })
-    that.showGoods(0);
+    that.showGoods();
   },
-  listenerButton: function () {
-    this.setData({
-      actionSheetHidden: !this.data.actionSheetHidden
-    });
-  },
-  listenerActionSheet: function () {
-    this.setData({
-      actionSheetHidden: !this.data.actionSheetHidden
-    })
-  },
-  TypeFunction: function(env){
-    var that = this
-    this.setData({
-      showtype: env.currentTarget.dataset.name,
-      actionSheetHidden: true
-    })
-    that.showGoods(env.currentTarget.dataset.id);
-  },
-  urlshop:function(e){
-    let that = this
-    let num = e.currentTarget.dataset.val
-    let nav = that.data.nav
-    let dat = nav === 1 ? 2 : 1
-    console.log(that.data.nav)
-    console.log(num)
-    if(num != nav){
-      that.setData({
-        nav: dat
-      })
-    }
-  },
-  showGoods:function(e){
+
+  showGoods:function(e=0,page=1){
     var that = this
     var user = wx.getStorageSync('user')
+    let ranklistBefore = that.data.goods_item;
+
     wx.request({
-      url: app.url + 'shop/shopCenter/',
+      url: app.url + 'goods/shopCenter/',
       data: {
         shopid: user.userid,
-        type:e
+        type:e,
+        page:page
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       method: 'GET',
       success: function(res) {
-        console.log(e)
-        console.log(res.data.data.data)
-        wx.hideLoading()
+
+        // 每次加载数据,请求一次就发送10条数据过来
+        let eachData = res.data.data.data;
+        if (eachData.length == 0) {
+          wx.showToast({
+            title: '没有更多数据了!~',
+            icon: 'none'
+          })
+        } else {
+          wx.showToast({
+            title: '数据加载中...',
+            icon: 'none'
+          })
+        }
+
         that.setData({
-          goods_item: res.data.data.data
+          loadText: "数据请求中",
+          loading: true,
+          goods_item: ranklistBefore.concat(eachData),
+          loadText: "加载更多",
+          loading: false,
+          page: res.data.data.current_page
         });
+
       },
     })
 
-  }
+  },
+  /**
+* 页面上拉触底事件的处理函数
+*/
+  onReachBottom: function () {
+    var that = this;
+    var page = that.data.page;
+
+    that.showGoods(0, Number(page) + Number(1));
+  },
 
 })

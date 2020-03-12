@@ -4,7 +4,7 @@
     <image class='userimg' src="{{user.avatar}}"></image>
     <view class="heade_name"> 
       <text>{{user.name}}</text>
-      <view>{{user.mobile}}</view>
+      <view>{{user.mobile ? user.mobile : user.tel}}</view>
     </view>
   </view>
 </view>
@@ -12,19 +12,19 @@
 <view class="userlist">
   <view class="list_title">管理</view>
   <view class="list_ul">
-    <!-- <navigator url="../order/order" class="list_li" hover-class="none">
-      <view>
-        <image src="../../static/images/l.jpg"></image>
-        <text> 订单</text>
-      </view>
-      <view>
-        <text>租聘0次</text>
-        <image src="../../static/images/r.jpg" ></image>
-      </view>  
-    </navigator>     -->
-    <navigator url="../dweb/dweb?oid=1" class="list_li" hover-class="none">
+      <navigator url="../plan/plan" class="list_li" hover-class="none" wx:if='{{user.mobile}}'>
       <view>
         <image src="../../static/images/j.jpg"></image>
+        <text> 进店计划</text>
+      </view>
+      <view>
+        <text>计划列表</text>
+        <image src="../../static/images/r.png" ></image>
+      </view>
+    </navigator>
+    <navigator url="../dweb/dweb?oid=2" class="list_li" hover-class="none">
+      <view>
+        <image src="../../static/images/j.png"></image>
         <text> 计价规则</text>
       </view>
       <view>
@@ -32,9 +32,9 @@
         <image src="../../static/images/r.png" ></image>
       </view>
     </navigator>
-    <navigator url="../dweb/dweb?oid=2" class="list_li" hover-class="none">
+    <navigator url="../dweb/dweb?oid=3" class="list_li" hover-class="none">
       <view>
-        <image src="../../static/images/f.jpg"></image>
+        <image src="../../static/images/f.png"></image>
         <text> 法律条款及隐私政策</text>
       </view>
       <view>
@@ -42,15 +42,15 @@
         <image src="../../static/images/r.png" ></image>
       </view>
     </navigator>
-    <navigator url="../order/order" class="list_li" hover-class="none">
+    <view  class="list_li" >
       <view>
-        <image src="../../static/images/k.jpg"></image>
+        <image src="../../static/images/k.png"></image>
         <text> 客服中心</text>
       </view>
-      <view>
+       <view bindtap="callfunction" data-val="{{user.phone}}">
         <text></text>
         <image src="../../static/images/r.png" ></image>
       </view>
-    </navigator>       
+    </view>       
   </view>
 </view>

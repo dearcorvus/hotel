@@ -26,7 +26,7 @@
   <!-- rich-text.wxml -->
 <rich-text nodes="{{nodes}}"></rich-text>
 
-    <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+    <!-- <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
       <view class="picker">
         回收方式：{{array[index]}}
       </view>
@@ -35,10 +35,30 @@
       <view class="picker">
         和服情况：{{arr[type]}}
       </view>
-    </picker>  
+    </picker>   -->
 </view>
 
+<!-- 回收选项 -->
+<view class="backbox">
+  <text>注:回收选项请告知客户</text>
+  <view class="backtype">
+    <view class="backtitle">回收方式</view>
+    <view class="backele">
+      <view class="{{t == 1 ? 'checked':''}}" bindtap="typeFunction" data-id="1">出租回收</view>
+      <view class="{{t == 2 ? 'checked':''}}" bindtap="typeFunction" data-id="2">和服入库</view>
+    </view>
+  </view>
 
+  <view  class="backtype">
+    <view class="backtitle">选择损坏部位</view>
+    <view class="backele">
+      <view class="backli" wx:for='{{arr}}' wx:key=''>
+        <image src="{{item.pic}}" class="{{b==item.id?'backcheck':''}}" data-id="{{item.id}}" data-type="{{index}}" bindtap="bboxFunction"></image>
+        <view>{{item.title}}</view>
+      </view>
+    </view>
+  </view>
+</view>
 
 
   <view class="pinFooter">
@@ -46,7 +66,7 @@
     <image src="/static/images/ghome.png"></image>
     <view>首页</view>
   </navigator>
-  <view class="collect" bindtap='collection' id='{{courseId}}'>
+  <view class="collect" bindtap='callfunction' data-val='{{tel}}'>
     <image src="/static/images/kf.jpg" class="hide"></image>
     <view>客服</view>
   </view> 

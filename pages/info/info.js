@@ -1,5 +1,9 @@
 // pages/info/info.js
+import PublicFun from '../../utils/PublicFun.js';
+
 const app = getApp()
+
+const phoneRexp = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
 
 Page({
 
@@ -42,6 +46,30 @@ Page({
     var tel = e.detail.value.tel
     var username = e.detail.value.username
     var user = wx.getStorageSync('user')
+    var errMsg=''
+
+    if (tel) {
+      if (!phoneRexp.test(tel)) {
+        errMsg = '手机号格式有误！'; 
+      }
+    }else{
+        errMsg = '请输入手机号！';
+    }
+
+    if (username == '') {
+      errMsg = '请输入姓名！';
+    }
+
+
+    if (errMsg) {
+      that.setData({
+        Loading: false
+      })
+      PublicFun._showToast(errMsg);
+      return false
+    }
+
+
 
     if (tel == '' || username == ''){
       wx.showToast({

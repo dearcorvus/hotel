@@ -123,3 +123,83 @@
   height: 100%;
 }
 
+
+.backbox{
+  width: 100%;
+  background-color:#f4f4f4;
+  margin: 0 auto;
+  padding: 20rpx;
+  box-sizing: border-box;
+  padding-bottom: 150rpx;
+}
+
+.backbox text{
+  font-size: 28rpx;
+  color: #8e8e8e;
+  line-height: 70rpx;
+}
+.backtype{
+  background-color: #fff;
+  margin-bottom: 20rpx;
+}
+.backtitle{
+  width: 100%;
+  height: 100rpx;
+  border-bottom: 1px solid #959595;
+  font-size: 32rpx;
+  color:#1e1e1e;
+  line-height: 100rpx;
+  text-indent: 30rpx;
+}
+.backele{
+  width: 100%;
+  padding: 36rpx;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap:wrap;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.backele view{
+  width: 45%;
+  /* height: 60rpx; */
+  border: 1px solid #c4c4c4;
+  text-align: center;
+  line-height: 60rpx;
+  font-size: 28rpx;
+  color: #242424;
+}
+.backele .checked{
+  color: #b6a790;
+  background-color: #fef4f2;
+  border:1px solid #b6a790;
+}
+
+.backele .backli{
+  width: 30%;
+  border:none;
+  margin-bottom: 30rpx;
+}
+.backele .backli image{
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 50%;
+  border:1px solid #ddd;
+  display: block;
+  margin: 0 auto;
+}
+.backele .backli view{
+  width: 100%;
+  padding: 0;
+  border:0;
+  text-align: center;
+  font-size: 30rpx;
+  line-height:40rpx; 
+}
+.backele:after{
+    content: '';
+    width: 30%;
+ }
+ .backele .backli .backcheck{
+   border:2px solid #b6a790;
+ }

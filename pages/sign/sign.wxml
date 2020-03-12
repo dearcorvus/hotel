@@ -1,0 +1,43 @@
+<!--pages/sign/sign.wxml-->
+
+<view class="storebox">
+        <view class="per_box">
+            <text class="per_title">产品系列：</text>
+            <view class='select-box'>
+              <picker class='picker' bindchange="bindPickerChange"  value="{{index}}" range="{{array}}" range-key="{{'title'}}">
+                  <view class='select'>  {{arrayValue ? arrayValue : '请选择产品系列' }}  
+                    <image class='select-img'  src="../../static/images/r.png" ></image>
+                  </view>
+                </picker>
+            </view> 
+
+           <block  wx:for="{{objList}}" wx:key="{{indexObjList}}" wx:for-item="vieorow">
+            
+              <view class='select-box'>
+                <picker class='picker' bindchange="bindPickerShopChange"   data-index = '{{index}}' range="{{vieorow.shop}}"  range-key="{{'title'}}"  >
+                    <view class='select'>  {{vieorow.shopVal ?vieorow. shopVal : '请选择店铺' }}  
+                      <image class='select-img'  src="../../static/images/r.png" ></image>
+                    </view>
+                  </picker>
+              </view> 
+
+              <view class="per_sex">
+                <view class="{{vieorow.status == 1 ? 'click' : ''}}" catchtap="selectShop2" data-index = '{{index}}'>主店</view>
+                <view class="{{vieorow.status == 2 ? 'click' : ''}}" catchtap="selectShop1" data-index = '{{index}}'>划店</view>
+                <view class="selects">
+                  <picker class='picker text' bindchange="bindPickerDayChange"  data-index = '{{index}}'  range="{{vieorow.day}}" range-key="{{'title'}}">
+                    <view class='selects'>  {{vieorow.dayVal ? vieorow.dayVal : '第几天' }}  
+                      <image class='select-img'  src="../../static/images/r.png" ></image>
+                    </view>
+                  </picker>
+                </view> 
+              </view>         
+                 
+            </block>
+
+                                                            
+            <view class="submit" bindtap="submitFunction" >保存提交</view>
+        </view>
+
+
+	</view>

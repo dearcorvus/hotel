@@ -1,4 +1,6 @@
 <!--pages/hotel/index.wxml-->
+<wxs module="dateUtil" src="../../utils/dateTime.wxs"></wxs>
+
 <view class="nav_box">
   <view class="{{nav==1?'check':''}}" bindtap="navFunction" data-id="1">全部</view>
   <view class="{{nav==2?'check':''}}" bindtap="navFunction" data-id="2">进库</view>
@@ -11,15 +13,19 @@
 
 <view class="order_box">
   <view class="order_child" wx:for='{{order_item}}' wx:key=''>
+    <navigator url="../orderinfo/orderinfo?orderid={{item.id}}">
     <view class="order_info">
-      <text>{{item.goods}}</text>
-      <view class="order_time">{{item.addtime}}</view>
+      <text>{{item.title}}</text>
+      <view class="order_time">
+      {{dateUtil.dateFormat(item.add_time,'YYYY年MM月dd日 hh时mm分ss秒')}}
+      </view>
       <view wx:if='{{item.status == 6 ? false : true }}'>
-        <!-- <view class="order_day">17分45秒</view>  -->
-        <view class="price">{{item.price}}元</view>    
+        <view class="order_day" wx:if="{{item.mtime }}" >{{item.mtime}}小时</view>
+        <view class="price" wx:if="{{item.price}}">{{item.price}}元</view>    
       </view>
     </view>
-    <view class='order_static'  >{{item.type == 1 ? '入库' : '出租'}}</view>
+    <view class='order_static'  >{{item.status == 1 ? '入库' : '出租'}}</view>
+    </navigator>
   </view>
 </view>
 

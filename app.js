@@ -3,7 +3,7 @@ App({
   globalData: {
     //开发环境  1 测试环境  2 生产环境
 
-    run_env: 0,
+    run_env: 1,
 
     //开发版本号
 
@@ -32,9 +32,12 @@ App({
         break;
       case 1:
         // 1- 测试环境
-        apiBaseUrl = 'http://cover.cn/public/index.php/kimono/';
+        apiBaseUrl = 'http://101.200.123.34:82/public/index.php/api/';
         break;
-
+      case 2:
+        // 1- 测试环境
+        apiBaseUrl = 'http://think.com/public/index.php/api/';
+        break;
       default:
         // 测试环境
         apiBaseUrl = 'http://cover.cn/public/index.php/kimono/';

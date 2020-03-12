@@ -20,9 +20,11 @@ Page({
     ],
     show: false,
     index:0,
-    array: ['归还','入库'],
+    badid:'',
     type:0,
-    arr:['完好','破损','无法修复']
+    t:1,
+    b:1,
+    arr:[]
   },
   bindPickerChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
@@ -43,7 +45,9 @@ Page({
     var that = this;
     var goodsid = options.detail;
     var type = options.type
- 
+    var order_id = options.order_id
+    var user = wx.getStorageSync("user");
+
     wx.showLoading({
       title: '加载中...',
     })
@@ -60,7 +64,6 @@ Page({
       },
       success: function (r) {
         wx.hideLoading()
-        console.log(r)
         if (r.data.code == 200) {
           that.setData({
             imgUrls: r.data.data.picarr,
@@ -68,8 +71,10 @@ Page({
             nodes: r.data.data.info,
             goodsid: goodsid,
             type: type,
-            status: r.data.status
-
+            arr: r.data.bad,
+            status: r.data.status,
+            order_id :order_id,
+            tel: user.tel
           })
         } else {
           wx.showToast({
@@ -119,31 +124,56 @@ Page({
     var user = wx.getStorageSync("user");
     var id = user.userid
     var goodsid = that.data.goodsid
-    var moshi = 1
-    console.log(goodsid)
-    console.log(that.data)
+    var moshi = that.data.b
+    var order_id = that.data.order_id
+
     wx.request({
       url: app.url + 'shop/go_shop',
       data:{
         id:id,
         goodsid:goodsid,
-        moshi:moshi
+        moshi:moshi,
+        order_id:order_id
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success: function(res) {
-        console.log(res)
         if(res.data.code == 200){
           wx.showToast({
             title: res.data.massage,
             icon: 'none',
             duration: 2000
           })
+
+          setTimeout(function(){
+            wx.reLaunch({
+              url:'../hotel/index'
+            })
+          },1300)
         }
       },
     })
-
-
-  }
+  },
+  typeFunction:function(e){
+    var type =e.currentTarget.dataset.id;
+    this.setData({
+      t:type
+    })
+  },
+  bboxFunction: function (e) {
+    // var type = e.currentTarget.dataset.type;
+    var id = e.currentTarget.dataset.id;
+    this.setData({
+      b: id,
+      badid:id
+    })
+  },
+  //联系客服
+  callfunction: function (e) {
+    console.log(e)
+    wx.makePhoneCall({
+      phoneNumber: e.currentTarget.dataset.val //仅为示例，并非真实的电话号码
+    })
+  },
 })
